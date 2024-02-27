@@ -1,0 +1,4 @@
+1-création de 2 fichiers en CPP
+2-configuration de la socket pour le client et le serveur et configurer la connexion entre les 2.
+3-Makefile fonctionnel pour compiler les 2 fichiers
+4-configuration du cbor en cours
