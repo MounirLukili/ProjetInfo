@@ -6,6 +6,7 @@
 #include <arpa/inet.h> // for inet_ntoa
 #include <cbor.h> // include CBOR library
 #include <errno.h> // for errno
+#include "BDD.h" // Include trajectory database functionality
 
 // Function to check if a socket is still connected
 bool isSocketConnected(int socket) {
@@ -15,6 +16,21 @@ bool isSocketConnected(int socket) {
 }
 
 int main() {
+    // Load trajectories from the CSV file
+    std::string filename = "birds.csv";
+    std::map<int, Trajectory> trajectories;
+    try {
+        trajectories = createTrajectories(filename);
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    
+   
+
+    // Print the number of trajectories created
+    std::cout << "Number of trajectories created: " << trajectories.size() << std::endl;
+
     // Create socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket == -1) {
@@ -26,7 +42,6 @@ int main() {
     struct sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY;
-    serverAddr.sin_addr.s_addr = inet_addr("172.18.0.1");
     serverAddr.sin_port = htons(12345); // Port number
     
     if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1) {
